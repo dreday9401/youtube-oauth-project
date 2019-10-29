@@ -79,42 +79,42 @@ function showChannelData(data) {
 }
 
 // Get channel from API
-function getChannel(channel) {
-  gapi.client.youtube.channels
+function getVideos(videos) {
+  gapi.client.youtube.videos
     .list({
       part: 'snippet,contentDetails,statistics',
-      forUsername: channel
+      forUsername: videoId
     })
     .then(response => {
       console.log(response);
-      const channel = response.result.items[0];
+      const video = response.result.items[0];
 
       const output = `
         <ul class="collection">
-          <li class="collection-item">Title: ${channel.snippet.title}</li>
-          <li class="collection-item">ID: ${channel.id}</li>
+          <li class="collection-item">Title: ${video.snippet.title}</li>
+          <li class="collection-item">ID: ${vidoe.id}</li>
           <li class="collection-item">Subscribers: ${numberWithCommas(
-            channel.statistics.subscriberCount
+            video.statistics.subscriberCount
           )}</li>
           <li class="collection-item">Views: ${numberWithCommas(
-            channel.statistics.viewCount
+            video.statistics.viewCount
           )}</li>
           <li class="collection-item">Videos: ${numberWithCommas(
-            channel.statistics.videoCount
+            video.statistics.videoCount
           )}</li>
         </ul>
-        <p>${channel.snippet.description}</p>
+        <p>${video.snippet.description}</p>
         <hr>
         <a class="btn grey darken-2" target="_blank" href="https://youtube.com/${
-          channel.snippet.customUrl
+          video.snippet.customUrl
         }">Visit Channel</a>
       `;
       showChannelData(output);
 
-      const playlistId = channel.contentDetails.relatedPlaylists.uploads;
+      const playlistId = video.contentDetails.relatedPlaylists.uploads;
       requestVideoPlaylist(playlistId);
     })
-    .catch(err => alert('No Channel By That Name'));
+    .catch(err => alert('No Videos available'));
 }
 
 // Add commas to number
