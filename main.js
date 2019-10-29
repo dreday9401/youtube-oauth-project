@@ -15,12 +15,12 @@ const videoContainer = document.getElementById('video-container');
 const defaultChannel = 'techguyweb';
 
 // Form submit and change channel
-videoForm.addEventListener('submit', e => {
+channelForm.addEventListener('submit', e => {
   e.preventDefault();
 
-  const video = videoInput.value;
+  const channel = channelInput.value;
 
-  getVideo(video);
+  getChannel(channel);
 });
 
 // Load auth2 library
@@ -53,7 +53,7 @@ function updateSigninStatus(isSignedIn) {
     signoutButton.style.display = 'block';
     content.style.display = 'block';
     videoContainer.style.display = 'block';
-    getVideo(defaultVideo);
+    getChannel(defaultChannel);
   } else {
     authorizeButton.style.display = 'block';
     signoutButton.style.display = 'none';
@@ -73,50 +73,48 @@ function handleSignoutClick() {
 }
 
 // Display channel data
-function showVideoData(data) {
-  const videoData = document.getElementById('video-data');
-  videoData.innerHTML = data;
+function showChannelData(data) {
+  const channelData = document.getElementById('channel-data');
+  channelData.innerHTML = data;
 }
 
 // Get channel from API
-function getVideo(video) {
-  gapi.client.youtube.videos
+function getChannel(channel) {
+  gapi.client.youtube.channels
     .list({
       part: 'snippet,contentDetails,statistics',
-      forUsername: video,
-      q:'nba games'
-
+      forUsername: channel
     })
     .then(response => {
       console.log(response);
-      const video = response.result.items[0];
+      const channel = response.result.items[0];
 
       const output = `
         <ul class="collection">
-          <li class="collection-item">Title: ${video.snippet.title}</li>
-          <li class="collection-item">ID: ${video.id}</li>
+          <li class="collection-item">Title: ${channel.snippet.title}</li>
+          <li class="collection-item">ID: ${channel.id}</li>
           <li class="collection-item">Subscribers: ${numberWithCommas(
-            video.statistics.subscriberCount
+            channel.statistics.subscriberCount
           )}</li>
           <li class="collection-item">Views: ${numberWithCommas(
-            video.statistics.viewCount
+            channel.statistics.viewCount
           )}</li>
           <li class="collection-item">Videos: ${numberWithCommas(
-            video.statistics.videoCount
+            channel.statistics.videoCount
           )}</li>
         </ul>
-        <p>${video.snippet.description}</p>
+        <p>${channel.snippet.description}</p>
         <hr>
         <a class="btn grey darken-2" target="_blank" href="https://youtube.com/${
-          video.snippet.customUrl
-        }">Visit Video</a>
+          channel.snippet.customUrl
+        }">Visit Channel</a>
       `;
-      showVideoData(output);
+      showChannelData(output);
 
-      const videoId = video.contentDetails.relatedPlaylists.uploads;
-      requestVideoPlaylist(videoId);
+      const playlistId = channel.contentDetails.relatedPlaylists.uploads;
+      requestVideoPlaylist(playlistId);
     })
-    .catch(err => alert('No Videos available'));
+    .catch(err => alert('No Channel By That Name'));
 }
 
 // Add commas to number
@@ -124,9 +122,9 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-function requestVideoId(VideoId) {
+function requestVideoPlaylist(playlistId) {
   const requestOptions = {
-    videoId: videoId,
+    playlistId: playlistId,
     part: 'snippet',
     maxResults: 10
   };
