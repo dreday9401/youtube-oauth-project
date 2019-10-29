@@ -73,17 +73,19 @@ function handleSignoutClick() {
 }
 
 // Display channel data
-function showChannelData(data) {
-  const channelData = document.getElementById('channel-data');
-  channelData.innerHTML = data;
+function showVideoData(data) {
+  const videoData = document.getElementById('video-data');
+  videoData.innerHTML = data;
 }
 
 // Get channel from API
-function getVideos(videos) {
+function getVideos(video) {
   gapi.client.youtube.videos
     .list({
       part: 'snippet,contentDetails,statistics',
-      forUsername: videoId
+      forUsername: video,
+      q:'nba games'
+      
     })
     .then(response => {
       console.log(response);
@@ -92,7 +94,7 @@ function getVideos(videos) {
       const output = `
         <ul class="collection">
           <li class="collection-item">Title: ${video.snippet.title}</li>
-          <li class="collection-item">ID: ${vidoe.id}</li>
+          <li class="collection-item">ID: ${video.id}</li>
           <li class="collection-item">Subscribers: ${numberWithCommas(
             video.statistics.subscriberCount
           )}</li>
@@ -107,12 +109,12 @@ function getVideos(videos) {
         <hr>
         <a class="btn grey darken-2" target="_blank" href="https://youtube.com/${
           video.snippet.customUrl
-        }">Visit Channel</a>
+        }">Visit Video</a>
       `;
-      showChannelData(output);
+      showVideoData(output);
 
-      const playlistId = video.contentDetails.relatedPlaylists.uploads;
-      requestVideoPlaylist(playlistId);
+      const videoId = video.contentDetails.relatedPlaylists.uploads;
+      requestVideoPlaylist(videoId);
     })
     .catch(err => alert('No Videos available'));
 }
@@ -122,9 +124,9 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-function requestVideoPlaylist(playlistId) {
+function requestVideoId(VideoId) {
   const requestOptions = {
-    playlistId: playlistId,
+    videoId: videoId,
     part: 'snippet',
     maxResults: 10
   };
