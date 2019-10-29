@@ -18,7 +18,7 @@ const defaultChannel = 'techguyweb';
 channelForm.addEventListener('submit', e => {
   e.preventDefault();
 
-  const channel = channelInput.value;
+  const video = videoInput.value;
 
   getVideo(video);
 });
