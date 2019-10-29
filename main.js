@@ -15,7 +15,7 @@ const videoContainer = document.getElementById('video-container');
 const defaultChannel = 'techguyweb';
 
 // Form submit and change channel
-channelForm.addEventListener('submit', e => {
+videoForm.addEventListener('submit', e => {
   e.preventDefault();
 
   const video = videoInput.value;
