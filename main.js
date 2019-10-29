@@ -20,7 +20,7 @@ channelForm.addEventListener('submit', e => {
 
   const channel = channelInput.value;
 
-  getChannel(channel);
+  getVideo(video);
 });
 
 // Load auth2 library
@@ -53,7 +53,7 @@ function updateSigninStatus(isSignedIn) {
     signoutButton.style.display = 'block';
     content.style.display = 'block';
     videoContainer.style.display = 'block';
-    getChannel(defaultChannel);
+    getVideo(defaultVideo);
   } else {
     authorizeButton.style.display = 'block';
     signoutButton.style.display = 'none';
@@ -79,13 +79,13 @@ function showVideoData(data) {
 }
 
 // Get channel from API
-function getVideos(video) {
+function getVideo(video) {
   gapi.client.youtube.videos
     .list({
       part: 'snippet,contentDetails,statistics',
       forUsername: video,
       q:'nba games'
-      
+
     })
     .then(response => {
       console.log(response);
